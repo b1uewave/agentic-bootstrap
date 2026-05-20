@@ -1,7 +1,5 @@
-<!-- docs/_sidebar.md -->
-
 * **Agentic Bootstrap Core**
-  * [Home](/)
+  * [Home](README.md)
   * [SOP Protocol Guide](PROJECT_RULES.md)
   * [Staging & Env Guide](docs/environment_guide.md)
 
