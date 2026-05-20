@@ -1,0 +1,27 @@
+{
+  "name": "agentic-bootstrap",
+  "version": "1.0.0",
+  "description": "Zero-dependency CLI tool and boilerplate to scaffold AI-Agent standardized development environments.",
+  "main": "scripts/init.js",
+  "bin": {
+    "agentic-bootstrap": "./scripts/init.js"
+  },
+  "scripts": {
+    "init": "node scripts/init.js"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "agentic",
+    "sop",
+    "boilerplate",
+    "cursorrules",
+    "workflow",
+    "automation"
+  ],
+  "author": "Chying",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
