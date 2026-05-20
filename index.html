@@ -15,42 +15,46 @@
   <!-- Themeable Docsify Core Style -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   
-  <!-- Custom Neon-Glassmorphic & Dual Theme Styling -->
+  <!-- Custom Neon-Glassmorphic & Dual Theme Styling (Readability-Focused) -->
   <style>
-    /* Theme variables */
+    /* Theme variables - Optimised for high contrast & premium legibility */
     :root {
-      /* Dark Theme (Default) */
-      --bg-color: #0b0f19;
-      --text-color: #e2e8f0;
-      --sidebar-bg: #111827;
-      --sidebar-border: rgba(255, 255, 255, 0.05);
-      --theme-color: #00f0ff;
-      --theme-glow: rgba(0, 240, 255, 0.4);
-      --theme-accent: #bd93f9;
-      --card-bg: rgba(17, 24, 39, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --code-bg: #1e2230;
-      --code-color: #ff7b72;
-      --heading-color: #f8fafc;
+      /* Dark Theme (Default) - Spaceship/Slate Dark style */
+      --bg-color: #0f172a;           /* Deep Slate Blue (Highly Muted) */
+      --text-color: #f1f5f9;         /* Very Light Slate (AAA Legibility) */
+      --sidebar-bg: #090d16;         /* Solid Darker Blue-Black for Sidebar */
+      --sidebar-border: rgba(255, 255, 255, 0.08);
+      --theme-color: #38bdf8;        /* Sky Cyan (Bright but highly readable in dark) */
+      --theme-glow: rgba(56, 189, 248, 0.4);
+      --theme-accent: #a78bfa;       /* Soft Purple */
+      --card-bg: #1e293b;            /* High Contrast Slate Blue */
+      --card-border: rgba(255, 255, 255, 0.12);
+      --code-bg: #0b0f19;            /* Very dark code block background */
+      --code-color: #f43f5e;         /* Bright Rose for inline code */
+      --heading-color: #ffffff;      /* Pure White headers */
+      --blockquote-bg: #1e293b;
+      --blockquote-text: #94a3b8;
       --border-radius: 12px;
-      --base-font-size: 16px;
-      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --base-font-size: 17px;        /* Increased size for premium readability */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body.light-theme {
-      /* Light Theme Override */
-      --bg-color: #f8fafc;
-      --text-color: #334155;
-      --sidebar-bg: #ffffff;
+      /* Light Theme Override - Editorial White style */
+      --bg-color: #ffffff;           /* Crisp White background */
+      --text-color: #1e293b;         /* Deep Slate Gray (AAA Legibility) */
+      --sidebar-bg: #f8fafc;         /* Pure Muted slate-white sidebar */
       --sidebar-border: rgba(0, 0, 0, 0.08);
-      --theme-color: #0284c7;
+      --theme-color: #0284c7;        /* Deep Sky Blue for links */
       --theme-glow: rgba(2, 132, 199, 0.3);
-      --theme-accent: #7c3aed;
-      --card-bg: #ffffff;
+      --theme-accent: #6d28d9;       /* Deep Royal Purple */
+      --card-bg: #f1f5f9;            /* Clean light-slate card */
       --card-border: rgba(0, 0, 0, 0.08);
-      --code-bg: #f1f5f9;
-      --code-color: #e11d48;
-      --heading-color: #0f172a;
+      --code-bg: #f8fafc;            /* Crisp light code block */
+      --code-color: #be185d;         /* Deep Rose for inline code */
+      --heading-color: #0f172a;      /* Bold Slate Blue headers */
+      --blockquote-bg: #f1f5f9;
+      --blockquote-text: #475569;
     }
 
     /* Core Layout Styles */
@@ -59,152 +63,41 @@
       color: var(--text-color);
       font-family: var(--font-family);
       font-size: var(--base-font-size);
+      line-height: 1.8;              /* Elegant line height for text breathing room */
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Custom Theme Toggle Button */
+    /* Floating Theme Toggle Button - Bottom Right (Better UX, avoids GitHub Corner conflict) */
     .theme-toggle-btn {
       position: fixed;
-      right: 25px;
-      top: 20px;
-      width: 44px;
-      height: 44px;
+      right: 30px;
+      bottom: 30px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
+      border: 2px solid var(--theme-color);
       color: var(--theme-color);
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 999;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .theme-toggle-btn:hover {
       transform: scale(1.1) rotate(15deg);
-      box-shadow: 0 0 15px var(--theme-glow);
-      border-color: var(--theme-color);
+      box-shadow: 0 0 20px var(--theme-glow);
     }
 
-    /* Coverpage Redesign */
-    section.cover {
-      background: linear-gradient(135deg, #070a13 0%, #111827 50%, #070a13 100%) !important;
-      position: relative;
-      overflow: hidden;
-    }
-
-    section.cover::before {
-      content: "";
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
-      top: -100px;
-      right: -100px;
-      pointer-events: none;
-    }
-
-    section.cover::after {
-      content: "";
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(189, 147, 249, 0.08) 0%, transparent 70%);
-      bottom: -150px;
-      left: -150px;
-      pointer-events: none;
-    }
-
-    section.cover h1 {
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      font-size: 4.5rem;
-      letter-spacing: -2px;
-      background: linear-gradient(120deg, #ffffff 30%, var(--theme-color) 70%, var(--theme-accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-      animation: titleGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-      from { filter: drop-shadow(0 0 2px rgba(255,255,255,0.1)); }
-      to { filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.3)); }
-    }
-
-    section.cover p {
-      font-size: 1.25rem !important;
-      color: #94a3b8 !important;
-      max-width: 750px;
-      margin: 0 auto 30px auto;
-      line-height: 1.6;
-    }
-
-    .cover-badges {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-    }
-
-    .cover-badges span {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #cbd5e1;
-      padding: 6px 16px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    /* GitHub Corner Custom Styling */
+    .github-corner svg {
+      fill: var(--theme-color) !important;
+      color: var(--bg-color) !important;
       transition: all 0.3s ease;
-    }
-
-    .cover-badges span:hover {
-      transform: translateY(-2px);
-      border-color: var(--theme-color);
-      box-shadow: 0 0 10px var(--theme-glow);
-    }
-
-    section.cover a {
-      font-family: 'Outfit', sans-serif !important;
-      font-weight: 600 !important;
-      padding: 14px 32px !important;
-      border-radius: 30px !important;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      font-size: 1.05rem !important;
-      border: none !important;
-      text-decoration: none !important;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
-    }
-
-    section.cover a:first-of-type {
-      background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-accent) 100%) !important;
-      color: #070a13 !important;
-      margin-right: 15px !important;
-    }
-
-    section.cover a:first-of-type:hover {
-      transform: translateY(-3px) scale(1.03) !important;
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
-    }
-
-    section.cover a:last-of-type {
-      background: rgba(255, 255, 255, 0.05) !important;
-      color: #f8fafc !important;
-      border: 1px solid rgba(255,255,255,0.1) !important;
-      backdrop-filter: blur(8px);
-    }
-
-    section.cover a:last-of-type:hover {
-      transform: translateY(-3px) !important;
-      background: rgba(255, 255, 255, 0.1) !important;
-      border-color: var(--theme-accent) !important;
-      box-shadow: 0 0 20px rgba(189, 147, 249, 0.3) !important;
     }
 
     /* Sidebar Glassmorphism Styling */
@@ -215,7 +108,7 @@
     }
 
     .sidebar-nav ul li a {
-      color: #94a3b8 !important;
+      color: #64748b !important; /* Default sidebar text color - elegant gray */
       font-size: 0.95rem;
       padding: 8px 12px !important;
       border-radius: 8px;
@@ -223,35 +116,48 @@
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
+    body.light-theme .sidebar-nav ul li a {
+      color: #475569 !important;
+    }
+
     .sidebar-nav ul li a:hover {
       color: var(--theme-color) !important;
-      background-color: rgba(255, 255, 255, 0.03) !important;
-      transform: translateX(5px);
+      background-color: rgba(255, 255, 255, 0.04) !important;
+      transform: translateX(4px);
+    }
+
+    body.light-theme .sidebar-nav ul li a:hover {
+      background-color: rgba(0, 0, 0, 0.03) !important;
     }
 
     .sidebar-nav ul li.active > a {
       color: var(--theme-color) !important;
       font-weight: 600 !important;
-      background: rgba(0, 240, 255, 0.05) !important;
+      background: rgba(56, 189, 248, 0.08) !important;
       border-left: 3px solid var(--theme-color);
       border-radius: 0 8px 8px 0;
+    }
+
+    body.light-theme .sidebar-nav ul li.active > a {
+      background: rgba(2, 132, 199, 0.08) !important;
     }
 
     /* Sidebar Header (App Name) */
     .sidebar .app-name-link {
       font-family: 'Outfit', sans-serif !important;
       font-weight: 700 !important;
-      font-size: 1.4rem !important;
+      font-size: 1.45rem !important;
       background: linear-gradient(135deg, var(--theme-color), var(--theme-accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -0.5px;
+      padding: 10px 0 !important;
     }
 
     /* Markdown styling */
     .markdown-section {
       max-width: 900px !important;
-      padding: 40px 15px !important;
+      padding: 40px 25px !important;
     }
 
     .markdown-section h1, .markdown-section h2, .markdown-section h3 {
@@ -261,24 +167,43 @@
       letter-spacing: -0.5px;
     }
 
-    .markdown-section h1 { font-size: 2.25rem; border-bottom: 1px solid var(--sidebar-border); padding-bottom: 8px; }
-    .markdown-section h2 { font-size: 1.65rem; margin-top: 35px; }
+    .markdown-section h1 { 
+      font-size: 2.3rem; 
+      border-bottom: 2px solid var(--sidebar-border); 
+      padding-bottom: 12px; 
+      margin-bottom: 25px;
+    }
+    
+    .markdown-section h2 { 
+      font-size: 1.7rem; 
+      margin-top: 45px; 
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--sidebar-border);
+      padding-bottom: 6px;
+    }
+
+    .markdown-section h3 {
+      font-size: 1.3rem;
+      margin-top: 35px;
+      margin-bottom: 10px;
+    }
     
     .markdown-section a {
       color: var(--theme-color) !important;
-      font-weight: 500;
+      font-weight: 600;
       text-decoration: none;
-      border-bottom: 1px dashed transparent;
-      transition: border-bottom 0.2s ease;
+      border-bottom: 1px dashed var(--theme-color);
+      transition: all 0.2s ease;
     }
     
     .markdown-section a:hover {
-      border-bottom-color: var(--theme-color);
+      border-bottom-style: solid;
+      filter: brightness(1.2);
     }
 
     .markdown-section p, .markdown-section li {
-      line-height: 1.7;
-      color: var(--text-color);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.01em;
     }
 
     /* MacOS Code Terminal Cards Style */
@@ -286,19 +211,23 @@
       background-color: var(--code-bg) !important;
       border: 1px solid var(--card-border) !important;
       border-radius: var(--border-radius) !important;
-      padding: 40px 20px 20px 20px !important;
+      padding: 45px 22px 22px 22px !important;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
-      margin: 25px 0 !important;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3) !important;
+      margin: 30px 0 !important;
       overflow-x: auto;
+    }
+
+    body.light-theme .markdown-section pre {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
     }
 
     /* The Red, Yellow, Green Window Dots */
     .markdown-section pre::before {
       content: "";
       position: absolute;
-      top: 15px;
-      left: 18px;
+      top: 18px;
+      left: 20px;
       width: 12px;
       height: 12px;
       border-radius: 50%;
@@ -307,36 +236,88 @@
     }
 
     .markdown-section code {
-      font-family: 'Fira Code', monospace !important;
+      font-family: 'Fira Code', 'Courier New', monospace !important;
       background-color: var(--code-bg) !important;
       color: var(--code-color) !important;
-      border-radius: 4px;
-      padding: 3px 6px;
+      border-radius: 6px;
+      padding: 3px 8px;
       font-size: 0.9em;
       border: 1px solid var(--card-border);
+      font-weight: 500;
     }
 
     .markdown-section pre code {
       border: none !important;
       padding: 0 !important;
       background-color: transparent !important;
-      color: #e2e8f0 !important;
+      color: var(--text-color) !important;
       font-size: 0.9rem !important;
+      line-height: 1.6;
     }
 
-    /* Custom Callouts (GitHub Style Alerts) */
+    /* High-Contrast Syntax Highlighting Overrides for Dark Mode */
+    body:not(.light-theme) .token.comment,
+    body:not(.light-theme) .token.prolog,
+    body:not(.light-theme) .token.doctype,
+    body:not(.light-theme) .token.cdata {
+      color: #6272a4 !important; /* Soft Indigo Gray */
+      font-style: italic;
+    }
+    body:not(.light-theme) .token.punctuation {
+      color: #cbd5e1 !important;
+    }
+    body:not(.light-theme) .token.property,
+    body:not(.light-theme) .token.tag,
+    body:not(.light-theme) .token.constant,
+    body:not(.light-theme) .token.symbol,
+    body:not(.light-theme) .token.deleted {
+      color: #f43f5e !important; /* Rose Red */
+    }
+    body:not(.light-theme) .token.boolean,
+    body:not(.light-theme) .token.number {
+      color: #bd93f9 !important; /* Neon Violet */
+    }
+    body:not(.light-theme) .token.selector,
+    body:not(.light-theme) .token.attr-name,
+    body:not(.light-theme) .token.string,
+    body:not(.light-theme) .token.char,
+    body:not(.light-theme) .token.builtin,
+    body:not(.light-theme) .token.inserted {
+      color: #34d399 !important; /* Fresh Mint Green */
+    }
+    body:not(.light-theme) .token.operator,
+    body:not(.light-theme) .token.entity,
+    body:not(.light-theme) .token.url,
+    body:not(.light-theme) .language-css .token.string,
+    body:not(.light-theme) .style .token.string {
+      color: #f8fafc !important;
+    }
+    body:not(.light-theme) .token.atrule,
+    body:not(.light-theme) .token.attr-value,
+    body:not(.light-theme) .token.keyword {
+      color: #38bdf8 !important; /* Bright Sky Blue */
+      font-weight: 600;
+    }
+    body:not(.light-theme) .token.function,
+    body:not(.light-theme) .token.class-name {
+      color: #fb923c !important; /* Orange */
+    }
+
+    /* Custom Callouts (GitHub Style Alerts) - Improved Contrast */
     .markdown-section blockquote {
       border-left: 4px solid var(--theme-color) !important;
-      background-color: rgba(0, 240, 255, 0.02) !important;
+      background-color: var(--card-bg) !important;
+      border: 1px solid var(--card-border);
       border-radius: 0 8px 8px 0;
-      padding: 15px 20px !important;
-      margin: 20px 0 !important;
+      padding: 16px 24px !important;
+      margin: 28px 0 !important;
     }
 
     .markdown-section blockquote p {
       margin: 0 !important;
-      font-style: italic;
-      color: #94a3b8;
+      font-style: normal;
+      color: var(--blockquote-text) !important;
+      font-weight: 500;
     }
 
     /* Mermaid Wrapper Card */
@@ -344,11 +325,11 @@
       background-color: var(--card-bg) !important;
       border: 1px solid var(--card-border) !important;
       border-radius: var(--border-radius);
-      padding: 25px;
-      margin: 25px 0;
+      padding: 30px;
+      margin: 30px 0;
       display: flex;
       justify-content: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
       backdrop-filter: blur(8px);
     }
 
@@ -357,32 +338,77 @@
       height: auto !important;
     }
 
+    /* Table styling - Enhanced legibility */
+    .markdown-section table {
+      width: 100%;
+      margin: 30px 0;
+      border-collapse: collapse;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .markdown-section th {
+      background-color: rgba(56, 189, 248, 0.08);
+      font-weight: 600;
+      padding: 12px 15px;
+      border-bottom: 2px solid var(--card-border);
+      color: var(--heading-color);
+      text-align: left;
+    }
+
+    body.light-theme .markdown-section th {
+      background-color: rgba(2, 132, 199, 0.06);
+    }
+
+    .markdown-section td {
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .markdown-section tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Back-to-top custom anchor spacing */
+    .markdown-section hr {
+      border: none;
+      border-bottom: 1px solid var(--sidebar-border);
+      margin: 40px 0;
+    }
+
     /* Responsive adjusts */
     @media screen and (max-width: 768px) {
-      section.cover h1 {
-        font-size: 2.8rem;
+      .markdown-section {
+        padding: 30px 15px !important;
       }
-      section.cover p {
-        font-size: 1.05rem !important;
+      .markdown-section h1 { font-size: 1.8rem; }
+      .markdown-section h2 { font-size: 1.4rem; }
+      .theme-toggle-btn {
+        right: 20px;
+        bottom: 20px;
+        width: 44px;
+        height: 44px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Theme Toggle Floating Element -->
+  <!-- Theme Toggle Floating FAB -->
   <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">
     🌙
   </button>
 
   <div id="app">Loading Agentic Bootstrap Portal...</div>
 
-  <!-- Main Config -->
+  <!-- Main Config - DISABLED Coverpage for instant access, Repo set for GitHub Corner -->
   <script>
     window.$docsify = {
       name: 'Agentic Bootstrap',
       repo: 'https://github.com/b1uewave/agentic-bootstrap',
       loadSidebar: true,
-      coverpage: true,
+      coverpage: false,              /* COVERPAGE DISABLED FOR QUICK ACCESS */
       subMaxLevel: 2,
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md'
@@ -423,7 +449,6 @@
         localStorage.setItem('theme', 'light');
         btn.textContent = '☀️';
       }
-      // Re-trigger mermaid colors if necessary (simplistic approach: page refresh or direct svg classes rewrite)
     });
   </script>
 
@@ -438,12 +463,12 @@
       startOnLoad: false,
       theme: 'dark',
       themeVariables: {
-        background: '#111827',
-        primaryColor: '#1e293b',
-        primaryTextColor: '#f8fafc',
-        lineColor: '#00f0ff',
-        secondaryColor: '#3b82f6',
-        tertiaryColor: '#1f2937'
+        background: '#1e293b',
+        primaryColor: '#0f172a',
+        primaryTextColor: '#cbd5e1',
+        lineColor: '#38bdf8',
+        secondaryColor: '#38bdf8',
+        tertiaryColor: '#1e293b'
       }
     });
     
