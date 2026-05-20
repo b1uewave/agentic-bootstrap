@@ -81,12 +81,18 @@
     }
 
     /* ============================================================
-       THEME TOGGLE (PRESERVED — bottom-right FAB)
+       FLOATING ACTION BUTTONS (bottom-right stack)
        ============================================================ */
-    .theme-toggle-btn {
+    .fab-stack {
       position: fixed;
       right: 28px;
       bottom: 28px;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 12px;
+      z-index: 999;
+    }
+    .fab-btn {
       width: 48px;
       height: 48px;
       border-radius: 50%;
@@ -98,14 +104,39 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 999;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .theme-toggle-btn:hover {
-      transform: scale(1.08) rotate(12deg);
+    .fab-btn:hover {
+      transform: scale(1.08);
       border-color: var(--accent);
       box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .theme-toggle-btn:hover {
+      transform: scale(1.08) rotate(12deg);
+    }
+    /* Language toggle specific */
+    .lang-toggle-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    /* ============================================================
+       SIDEBAR LANGUAGE VISIBILITY
+       ============================================================ */
+    .sidebar-nav > ul > li.lang-en,
+    .sidebar-nav > ul > li.lang-zh {
+      transition: opacity 0.2s ease, max-height 0.25s ease;
+      overflow: hidden;
+    }
+    .sidebar-nav > ul > li.lang-hidden {
+      opacity: 0;
+      max-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      pointer-events: none;
     }
 
     /* ============================================================
@@ -129,12 +160,15 @@
       transition: background 0.25s ease;
     }
 
-    /* App name */
+    /* App name — colorful gradient logo */
     .app-name-link {
       font-family: 'Outfit', sans-serif !important;
       font-weight: 700 !important;
       font-size: 1.25rem !important;
-      color: var(--text-bright) !important;
+      background: linear-gradient(135deg, #38bdf8, #a78bfa) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
       letter-spacing: -0.3px;
       opacity: 1 !important;
       padding: 12px 0 8px !important;
@@ -489,8 +523,11 @@
   </style>
 </head>
 <body>
-  <!-- Theme Toggle (PRESERVED) -->
-  <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">🌙</button>
+  <!-- Floating Action Buttons (bottom-right) -->
+  <div class="fab-stack">
+    <button class="fab-btn theme-toggle-btn" id="theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">🌙</button>
+    <button class="fab-btn lang-toggle-btn" id="lang-toggle" title="Toggle Language" aria-label="Toggle Language">EN</button>
+  </div>
 
   <div id="app">Loading…</div>
 
@@ -513,18 +550,17 @@
     }
   </script>
 
-  <!-- Theme toggle handler -->
+  <!-- Theme toggle + Language toggle handlers -->
   <script>
     (function() {
-      const btn = document.getElementById('theme-toggle');
-      const body = document.body;
-      const saved = localStorage.getItem('theme');
+      /* ---- Theme Toggle ---- */
+      var themeBtn = document.getElementById('theme-toggle');
+      var body = document.body;
 
       function applyDark() {
         body.classList.remove('light');
-        btn.textContent = '🌙';
+        themeBtn.textContent = '🌙';
         localStorage.setItem('theme', 'dark');
-        // Re-init mermaid for dark
         if (window.mermaid) {
           mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: {
             background: '#181b23', primaryColor: '#1e293b', primaryTextColor: '#d4d4d8',
@@ -535,9 +571,8 @@
 
       function applyLight() {
         body.classList.add('light');
-        btn.textContent = '☀️';
+        themeBtn.textContent = '☀️';
         localStorage.setItem('theme', 'light');
-        // Re-init mermaid for light
         if (window.mermaid) {
           mermaid.initialize({ startOnLoad: false, theme: 'default', themeVariables: {
             background: '#ffffff', primaryColor: '#e0e7ff', primaryTextColor: '#18181b',
@@ -546,12 +581,11 @@
         }
       }
 
-      // Apply saved preference
-      if (saved === 'light') { applyLight(); } else { applyDark(); }
+      var savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') { applyLight(); } else { applyDark(); }
 
-      btn.addEventListener('click', function() {
+      themeBtn.addEventListener('click', function() {
         if (body.classList.contains('light')) { applyDark(); } else { applyLight(); }
-        // Re-render mermaid diagrams on the current page
         setTimeout(function() {
           document.querySelectorAll('.mermaid').forEach(function(el) {
             var code = el.getAttribute('data-original') || el.textContent;
@@ -562,6 +596,65 @@
           if (window.mermaid) { mermaid.init(undefined, '.mermaid'); }
         }, 100);
       });
+
+      /* ---- Language Toggle ---- */
+      var langBtn = document.getElementById('lang-toggle');
+      var currentLang = localStorage.getItem('lang') || 'en';
+
+      // English header keywords
+      var enHeaders = ['core docs', 'templates'];
+      // Chinese header keywords
+      var zhHeaders = ['核心文件', '範本文件'];
+
+      function tagSidebarGroups() {
+        var groups = document.querySelectorAll('.sidebar-nav > ul > li');
+        groups.forEach(function(li) {
+          // Get the group header text (the <p> or <strong> inside)
+          var header = li.querySelector('p, strong');
+          if (!header) return;
+          var text = header.textContent.trim().toLowerCase();
+          var isEn = enHeaders.some(function(h) { return text.indexOf(h) !== -1; });
+          var isZh = zhHeaders.some(function(h) { return text.indexOf(h) !== -1; });
+          if (isEn) {
+            li.classList.add('lang-en');
+            li.classList.remove('lang-zh');
+          } else if (isZh) {
+            li.classList.add('lang-zh');
+            li.classList.remove('lang-en');
+          }
+        });
+      }
+
+      function applyLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+        langBtn.textContent = lang === 'en' ? 'EN' : '中';
+        langBtn.title = lang === 'en' ? 'Switch to 中文' : 'Switch to English';
+        // Show/hide sidebar groups
+        var groups = document.querySelectorAll('.sidebar-nav > ul > li');
+        groups.forEach(function(li) {
+          if (li.classList.contains('lang-en')) {
+            li.classList.toggle('lang-hidden', lang !== 'en');
+          } else if (li.classList.contains('lang-zh')) {
+            li.classList.toggle('lang-hidden', lang !== 'zh');
+          }
+        });
+      }
+
+      langBtn.addEventListener('click', function() {
+        applyLang(currentLang === 'en' ? 'zh' : 'en');
+      });
+
+      // Hook into Docsify lifecycle — re-tag sidebar after each page load
+      window.$docsify = window.$docsify || {};
+      window.$docsify.plugins = (window.$docsify.plugins || []).concat([
+        function(hook) {
+          hook.doneEach(function() {
+            tagSidebarGroups();
+            applyLang(currentLang);
+          });
+        }
+      ]);
     })();
   </script>
 
