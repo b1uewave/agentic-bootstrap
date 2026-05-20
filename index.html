@@ -6,39 +6,383 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="A zero-dependency template and interactive CLI to scaffold professional, quality-controlled AI Agent workflows.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- Premium Dark/Light theme links -->
+  
+  <!-- Premium Fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Themeable Docsify Core Style -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  
+  <!-- Custom Neon-Glassmorphic & Dual Theme Styling -->
   <style>
+    /* Theme variables */
     :root {
-      --theme-color: #00b4d8;
+      /* Dark Theme (Default) */
+      --bg-color: #0b0f19;
+      --text-color: #e2e8f0;
+      --sidebar-bg: #111827;
+      --sidebar-border: rgba(255, 255, 255, 0.05);
+      --theme-color: #00f0ff;
+      --theme-glow: rgba(0, 240, 255, 0.4);
+      --theme-accent: #bd93f9;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --code-bg: #1e2230;
+      --code-color: #ff7b72;
+      --heading-color: #f8fafc;
+      --border-radius: 12px;
       --base-font-size: 16px;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
+
+    body.light-theme {
+      /* Light Theme Override */
+      --bg-color: #f8fafc;
+      --text-color: #334155;
+      --sidebar-bg: #ffffff;
+      --sidebar-border: rgba(0, 0, 0, 0.08);
+      --theme-color: #0284c7;
+      --theme-glow: rgba(2, 132, 199, 0.3);
+      --theme-accent: #7c3aed;
+      --card-bg: #ffffff;
+      --card-border: rgba(0, 0, 0, 0.08);
+      --code-bg: #f1f5f9;
+      --code-color: #e11d48;
+      --heading-color: #0f172a;
+    }
+
+    /* Core Layout Styles */
     body {
-      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      font-size: var(--base-font-size);
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+    /* Custom Theme Toggle Button */
+    .theme-toggle-btn {
+      position: fixed;
+      right: 25px;
+      top: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--theme-color);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .theme-toggle-btn:hover {
+      transform: scale(1.1) rotate(15deg);
+      box-shadow: 0 0 15px var(--theme-glow);
+      border-color: var(--theme-color);
+    }
+
+    /* Coverpage Redesign */
+    section.cover {
+      background: linear-gradient(135deg, #070a13 0%, #111827 50%, #070a13 100%) !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    section.cover::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      pointer-events: none;
+    }
+
+    section.cover::after {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(189, 147, 249, 0.08) 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      pointer-events: none;
+    }
+
+    section.cover h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 4.5rem;
+      letter-spacing: -2px;
+      background: linear-gradient(120deg, #ffffff 30%, var(--theme-color) 70%, var(--theme-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      from { filter: drop-shadow(0 0 2px rgba(255,255,255,0.1)); }
+      to { filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.3)); }
+    }
+
+    section.cover p {
+      font-size: 1.25rem !important;
+      color: #94a3b8 !important;
+      max-width: 750px;
+      margin: 0 auto 30px auto;
+      line-height: 1.6;
+    }
+
+    .cover-badges {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .cover-badges span {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .cover-badges span:hover {
+      transform: translateY(-2px);
+      border-color: var(--theme-color);
+      box-shadow: 0 0 10px var(--theme-glow);
+    }
+
+    section.cover a {
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 600 !important;
+      padding: 14px 32px !important;
+      border-radius: 30px !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      font-size: 1.05rem !important;
+      border: none !important;
+      text-decoration: none !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
+    }
+
+    section.cover a:first-of-type {
+      background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-accent) 100%) !important;
+      color: #070a13 !important;
+      margin-right: 15px !important;
+    }
+
+    section.cover a:first-of-type:hover {
+      transform: translateY(-3px) scale(1.03) !important;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
+    }
+
+    section.cover a:last-of-type {
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      backdrop-filter: blur(8px);
+    }
+
+    section.cover a:last-of-type:hover {
+      transform: translateY(-3px) !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: var(--theme-accent) !important;
+      box-shadow: 0 0 20px rgba(189, 147, 249, 0.3) !important;
+    }
+
+    /* Sidebar Glassmorphism Styling */
     .sidebar {
-      background-color: #f8f9fa;
-      border-right: 1px solid #e9ecef;
+      background-color: var(--sidebar-bg) !important;
+      border-right: 1px solid var(--sidebar-border) !important;
+      transition: all 0.3s ease;
     }
+
+    .sidebar-nav ul li a {
+      color: #94a3b8 !important;
+      font-size: 0.95rem;
+      padding: 8px 12px !important;
+      border-radius: 8px;
+      margin: 4px 10px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .sidebar-nav ul li a:hover {
+      color: var(--theme-color) !important;
+      background-color: rgba(255, 255, 255, 0.03) !important;
+      transform: translateX(5px);
+    }
+
+    .sidebar-nav ul li.active > a {
+      color: var(--theme-color) !important;
+      font-weight: 600 !important;
+      background: rgba(0, 240, 255, 0.05) !important;
+      border-left: 3px solid var(--theme-color);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Sidebar Header (App Name) */
+    .sidebar .app-name-link {
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 1.4rem !important;
+      background: linear-gradient(135deg, var(--theme-color), var(--theme-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    /* Markdown styling */
+    .markdown-section {
+      max-width: 900px !important;
+      padding: 40px 15px !important;
+    }
+
     .markdown-section h1, .markdown-section h2, .markdown-section h3 {
+      font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      color: #1d3557;
+      color: var(--heading-color) !important;
+      letter-spacing: -0.5px;
     }
+
+    .markdown-section h1 { font-size: 2.25rem; border-bottom: 1px solid var(--sidebar-border); padding-bottom: 8px; }
+    .markdown-section h2 { font-size: 1.65rem; margin-top: 35px; }
+    
+    .markdown-section a {
+      color: var(--theme-color) !important;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px dashed transparent;
+      transition: border-bottom 0.2s ease;
+    }
+    
+    .markdown-section a:hover {
+      border-bottom-color: var(--theme-color);
+    }
+
+    .markdown-section p, .markdown-section li {
+      line-height: 1.7;
+      color: var(--text-color);
+    }
+
+    /* MacOS Code Terminal Cards Style */
+    .markdown-section pre {
+      background-color: var(--code-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: var(--border-radius) !important;
+      padding: 40px 20px 20px 20px !important;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+      margin: 25px 0 !important;
+      overflow-x: auto;
+    }
+
+    /* The Red, Yellow, Green Window Dots */
+    .markdown-section pre::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 18px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #ff5f56;
+      box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+    }
+
     .markdown-section code {
-      background-color: #f1faee;
-      color: #e63946;
+      font-family: 'Fira Code', monospace !important;
+      background-color: var(--code-bg) !important;
+      color: var(--code-color) !important;
       border-radius: 4px;
       padding: 3px 6px;
+      font-size: 0.9em;
+      border: 1px solid var(--card-border);
+    }
+
+    .markdown-section pre code {
+      border: none !important;
+      padding: 0 !important;
+      background-color: transparent !important;
+      color: #e2e8f0 !important;
+      font-size: 0.9rem !important;
+    }
+
+    /* Custom Callouts (GitHub Style Alerts) */
+    .markdown-section blockquote {
+      border-left: 4px solid var(--theme-color) !important;
+      background-color: rgba(0, 240, 255, 0.02) !important;
+      border-radius: 0 8px 8px 0;
+      padding: 15px 20px !important;
+      margin: 20px 0 !important;
+    }
+
+    .markdown-section blockquote p {
+      margin: 0 !important;
+      font-style: italic;
+      color: #94a3b8;
+    }
+
+    /* Mermaid Wrapper Card */
+    .mermaid {
+      background-color: var(--card-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin: 25px 0;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Responsive adjusts */
+    @media screen and (max-width: 768px) {
+      section.cover h1 {
+        font-size: 2.8rem;
+      }
+      section.cover p {
+        font-size: 1.05rem !important;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Theme Toggle Floating Element -->
+  <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Theme" aria-label="Toggle Theme">
+    🌙
+  </button>
+
   <div id="app">Loading Agentic Bootstrap Portal...</div>
+
+  <!-- Main Config -->
   <script>
     window.$docsify = {
       name: 'Agentic Bootstrap',
-      repo: '',
+      repo: 'https://github.com/b1uewave/agentic-bootstrap',
       loadSidebar: true,
+      coverpage: true,
       subMaxLevel: 2,
       alias: {
         '/.*/_sidebar.md': '/_sidebar.md'
@@ -54,8 +398,73 @@
       }
     }
   </script>
-  <!-- Docsify Scripts -->
+
+  <!-- Theme Handler Script -->
+  <script>
+    const btn = document.getElementById('theme-toggle');
+    const body = document.body;
+    
+    // Read cached preference or default to dark
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') {
+      body.classList.add('light-theme');
+      btn.textContent = '☀️';
+    } else {
+      btn.textContent = '🌙';
+    }
+
+    btn.addEventListener('click', function() {
+      if (body.classList.contains('light-theme')) {
+        body.classList.remove('light-theme');
+        localStorage.setItem('theme', 'dark');
+        btn.textContent = '🌙';
+      } else {
+        body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light');
+        btn.textContent = '☀️';
+      }
+      // Re-trigger mermaid colors if necessary (simplistic approach: page refresh or direct svg classes rewrite)
+    });
+  </script>
+
+  <!-- Docsify Core and Plugins -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+
+  <!-- Mermaid Dynamic Engine and Renderer -->
+  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      themeVariables: {
+        background: '#111827',
+        primaryColor: '#1e293b',
+        primaryTextColor: '#f8fafc',
+        lineColor: '#00f0ff',
+        secondaryColor: '#3b82f6',
+        tertiaryColor: '#1f2937'
+      }
+    });
+    
+    // Auto hook Docsify code block parser
+    let num = 0;
+    const originCode = window.$docsify.markdown?.renderer?.code || function(code, lang) {
+      if (lang === "mermaid") {
+        return `<div class="mermaid">${code}</div>`;
+      }
+      return this.origin.code.apply(this, arguments);
+    };
+
+    window.$docsify.markdown = window.$docsify.markdown || {};
+    window.$docsify.markdown.renderer = window.$docsify.markdown.renderer || {};
+    window.$docsify.markdown.renderer.code = function(code, lang) {
+      if (lang === "mermaid") {
+        return `<div class="mermaid">${code}</div>`;
+      }
+      return originCode.apply(this, arguments);
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-mermaid@latest/dist/docsify-mermaid.js"></script>
 </body>
 </html>
