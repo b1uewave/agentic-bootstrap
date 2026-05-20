@@ -1,15 +1,15 @@
-<!-- _sidebar.md -->
+<!-- Sidebar Navigation -->
 
-* **⚙️ Agentic Core (EN)**
-  * [🏠 Home Welcome](README.md)
-  * [📜 SOP Protocol Rules](PROJECT_RULES.md)
-  * [🌐 Staging & Env Guide](docs/environment_guide.md)
+* **Core Docs**
+  * [Home](README.md)
+  * [SOP Protocol Rules](PROJECT_RULES.md)
+  * [Staging & Env Guide](docs/environment_guide.md)
 
-* **🇹🇼 繁體中文說明**
-  * [🏠 官方首頁 (README)](README.zh-TW.md)
-  * [🛡️ 環境部署與測試指南](docs/environment_guide.zh-TW.md)
+* **中文說明**
+  * [首頁 README](README.zh-TW.md)
+  * [環境部署指南](docs/environment_guide.zh-TW.md)
 
-* **📂 Boilerplate Templates**
-  * [📝 Implementation Plan](templates/implementation_plan_template.md)
-  * [✅ Task Checklist](templates/task_template.md)
-  * [🎨 Walkthrough Changelog](templates/walkthrough_template.md)
+* **Templates**
+  * [Implementation Plan](templates/implementation_plan_template.md)
+  * [Task Checklist](templates/task_template.md)
+  * [Walkthrough](templates/walkthrough_template.md)
