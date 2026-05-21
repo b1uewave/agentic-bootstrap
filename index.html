@@ -128,15 +128,17 @@
        ============================================================ */
     .sidebar-nav > ul > li.lang-en,
     .sidebar-nav > ul > li.lang-zh {
-      transition: opacity 0.2s ease, max-height 0.25s ease;
+      transition: opacity 0.2s ease, max-height 0.3s ease;
       overflow: hidden;
+      max-height: 500px; /* generous visible height */
     }
     .sidebar-nav > ul > li.lang-hidden {
-      opacity: 0;
+      opacity: 0 !important;
       max-height: 0 !important;
       margin: 0 !important;
       padding: 0 !important;
       pointer-events: none;
+      visibility: hidden;
     }
 
     /* ============================================================
@@ -600,27 +602,24 @@
       /* ---- Language Toggle ---- */
       var langBtn = document.getElementById('lang-toggle');
       var currentLang = localStorage.getItem('lang') || 'en';
-
-      // English header keywords
-      var enHeaders = ['core docs', 'templates'];
-      // Chinese header keywords
-      var zhHeaders = ['核心文件', '範本文件'];
+      // CJK Unicode range — reliably detects any Chinese characters
+      var cjkRegex = /[\u4e00-\u9fff]/;
 
       function tagSidebarGroups() {
+        // Get all top-level <li> groups in sidebar
         var groups = document.querySelectorAll('.sidebar-nav > ul > li');
         groups.forEach(function(li) {
-          // Get the group header text (the <p> or <strong> inside)
-          var header = li.querySelector('p, strong');
-          if (!header) return;
-          var text = header.textContent.trim().toLowerCase();
-          var isEn = enHeaders.some(function(h) { return text.indexOf(h) !== -1; });
-          var isZh = zhHeaders.some(function(h) { return text.indexOf(h) !== -1; });
-          if (isEn) {
-            li.classList.add('lang-en');
-            li.classList.remove('lang-zh');
-          } else if (isZh) {
+          // Find the bold group header (<p><strong>…</strong></p> or just <strong>)
+          var strong = li.querySelector('strong');
+          if (!strong) return;
+          var text = strong.textContent.trim();
+          // Remove stale tags
+          li.classList.remove('lang-en', 'lang-zh', 'lang-hidden');
+          // Tag based on whether header contains CJK characters
+          if (cjkRegex.test(text)) {
             li.classList.add('lang-zh');
-            li.classList.remove('lang-en');
+          } else {
+            li.classList.add('lang-en');
           }
         });
       }
@@ -630,9 +629,8 @@
         localStorage.setItem('lang', lang);
         langBtn.textContent = lang === 'en' ? 'EN' : '中';
         langBtn.title = lang === 'en' ? 'Switch to 中文' : 'Switch to English';
-        // Show/hide sidebar groups
-        var groups = document.querySelectorAll('.sidebar-nav > ul > li');
-        groups.forEach(function(li) {
+        // Show matching groups, hide non-matching
+        document.querySelectorAll('.sidebar-nav > ul > li').forEach(function(li) {
           if (li.classList.contains('lang-en')) {
             li.classList.toggle('lang-hidden', lang !== 'en');
           } else if (li.classList.contains('lang-zh')) {
@@ -645,7 +643,7 @@
         applyLang(currentLang === 'en' ? 'zh' : 'en');
       });
 
-      // Hook into Docsify lifecycle — re-tag sidebar after each page load
+      // Hook into Docsify lifecycle — re-tag sidebar after every page navigation
       window.$docsify = window.$docsify || {};
       window.$docsify.plugins = (window.$docsify.plugins || []).concat([
         function(hook) {
